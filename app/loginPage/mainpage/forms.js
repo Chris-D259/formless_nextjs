@@ -1,5 +1,5 @@
 "use client";
-import "tailwindcss/tailwind";
+import "tailwindcss/tailwind.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
