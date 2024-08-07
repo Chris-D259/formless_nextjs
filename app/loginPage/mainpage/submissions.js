@@ -1,24 +1,44 @@
 "use client";
 import { useState } from "react";
+import { getForms } from '../_services/form-service';
+import { useEffect } from 'react';
+import { useAuth } from '../_utils/auth_context';
+import {useRouter} from "next/navigation";
 
 export default function Submissions() {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const { user } = useAuth();
   const [submissions, setSubmissions] = useState([
-    {
-      id: 1,
-      name: "Fire Extinguisher Form",
-      category: "Safety",
-      submittedBy: "John Halo",
-      submittedDate: "2024-08-06",
-    },
-    {
-      id: 2,
-      name: "Monke Readiness Form",
-      category: "MONKE OSHA",
-      submittedBy: "John BaldursGate",
-      submittedDate: "3024AD",
-    },
+    // {
+    //   id: 1,
+    //   name: "Fire Extinguisher Form",
+    //   category: "Safety",
+    //   submittedBy: "John Halo",
+    //   submittedDate: "2024-08-06",
+    // },
+    // {
+    //   id: 2,
+    //   name: "Monke Readiness Form",
+    //   category: "MONKE OSHA",
+    //   submittedBy: "John BaldursGate",
+    //   submittedDate: "3024AD",
+    // },
   ]);
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+        if(user) {
+            try {
+                const forms = await getForms(user.uid);
+                setSubmissions(forms);
+            } catch (error) {
+                console.error("Error fetching forms:", error);
+            }
+        }
+    };
+    fetchSubmissions();
+}, [user]);  
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -26,6 +46,7 @@ export default function Submissions() {
 
   const handleView = (id) => {
     console.log(`View submission with id ${id}`);
+    router.push(`/loginPage/${id}`);    
   };
   const handleEdit = (id) => {
     console.log(`Edit submission with id ${id}`);

@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "../_utils/auth_context";
+import { addForm } from "../_services/form-service";
 import { useRouter } from "next/navigation";
+
 export default function Page() {
   const { logout } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const logoutCurrentUser = async () => {
     try {
@@ -27,14 +30,32 @@ export default function Page() {
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { licensePlate, currentDate, inspector, serialNumber, typeRating, status1, status2, status3, status4 } = e.target.elements;
     // Handle form submission logic here
     console.log("Form submitted:", form);
     const confirmation = window.confirm(
       "Are you sure you want to submit this form?"
     );
     if (confirmation) {
+        await addForm(user.uid,{
+          licensePlate: licensePlate.value,
+          currentDate: currentDate.value,
+          inspector: inspector.value,
+          serialNumber: serialNumber.value,
+          typeRating: typeRating.value,
+          status1: status1.value,
+          status2: status2.value,
+          status3: status3.value,
+          status4: status4.value,
+      })
+      licensePlate.value = "";
+      currentDate.value = "";
+      inspector.value = "";
+      serialNumber.value = "";
+      typeRating.value = "";
+      
       window.alert("Form submitted successfully");
       router.push("/loginPage/mainpage");
     }
