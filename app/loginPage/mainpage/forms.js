@@ -47,9 +47,6 @@ export default function FormsTable() {
   return (
     <>
       <header className="m-5 flex justify-between items-center">
-        <button className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-orange-500 hover:text-black">
-          Add Form
-        </button>
         <div className="mb-4">
           <input
             type="text"
